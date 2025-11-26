@@ -25,6 +25,27 @@ if uploaded_file:
         df = pd.read_csv(uploaded_file)
     else:
         df = pd.read_excel(uploaded_file)
+# -------------------------------
+# Show uploaded columns (debug + UX)
+# -------------------------------
+st.subheader("📄 Uploaded File Columns")
+st.write(list(df.columns))
+
+# -------------------------------
+# Column Mapping (User-controlled)
+# -------------------------------
+st.sidebar.header("🧩 Column Mapping")
+
+stage_col = st.sidebar.selectbox(
+    "Select Stage column",
+    df.columns
+)
+
+value_col = st.sidebar.selectbox(
+    "Select Deal Value column",
+    df.columns
+)
+
 
     st.success("✅ File uploaded successfully")
 
@@ -47,7 +68,11 @@ else:
 # KPI SECTION
 # ----------------------------------
 target = 120
-forecast = df[df["Stage"].isin(["Commit", "Won"])]["Deal_Size"].sum()
+forecast = df[
+    df[stage_col].astype(str).isin(["Commit", "Won"])
+][value_col].sum()
+if forecast == 0:
+    st.warning(" No Commit/Won deals found. Check stage naming.")
 gap = target - forecast
 
 c1, c2, c3 = st.columns(3)
