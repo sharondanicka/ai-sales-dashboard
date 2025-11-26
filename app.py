@@ -20,49 +20,31 @@ uploaded_file = st.sidebar.file_uploader(
 # ----------------------------------
 # LOAD DATA
 # ----------------------------------
-if uploaded_file:
-    if uploaded_file.name.endswith(".csv"):
+if uploaded_file is not None:
+    file_name = uploaded_file.name.lower()
+
+    if file_name.endswith(".csv"):
         df = pd.read_csv(uploaded_file)
+    elif file_name.endswith(".xlsx"):
+        df = pd.read_excel(uploaded_file, engine="openpyxl")
     else:
-        df = pd.read_excel(uploaded_file)
-# -------------------------------
-# Show uploaded columns (debug + UX)
-# -------------------------------
-st.subheader("📄 Uploaded File Columns")
-st.write(list(df.columns))
-
-# -------------------------------
-# Column Mapping (User-controlled)
-# -------------------------------
-st.sidebar.header("🧩 Column Mapping")
-
-stage_col = st.sidebar.selectbox(
-    "Select Stage column",
-    df.columns
-)
-
-value_col = st.sidebar.selectbox(
-    "Select Deal Value column",
-    df.columns
-)
-
+        st.error("❌ Unsupported file format")
+        st.stop()
 
     st.success("✅ File uploaded successfully")
 
 else:
-    # fallback dummy data
     np.random.seed(7)
     df = pd.DataFrame({
         "Account": [f"Account {i}" for i in range(1, 51)],
         "Region": np.random.choice(["India", "US", "EMEA", "APJC"], 50),
-        "Stage": np.random.choice(
-            ["Pipeline", "Proposal", "Commit", "Won"], 50
-        ),
+        "Stage": np.random.choice(["Pipeline", "Proposal", "Commit", "Won"], 50),
         "Deal_Size": np.random.uniform(1, 15, 50).round(1),
         "Close_Week": np.random.randint(1, 14, 50)
     })
 
     st.info("ℹ️ Using sample data (upload file to replace)")
+
 
 # ----------------------------------
 # KPI SECTION
