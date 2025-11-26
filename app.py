@@ -30,5 +30,5 @@ st.subheader("📊 Pipeline")
 st.dataframe(df, use_container_width=True)
 
 st.subheader("🧠 AI Insights")
-st.warning(⚠️ High dependency on late-quarter commits")
+st.warning(" High dependency on late-quarter commits")
 st.success("✅ 6 large deals can close with exec focus")
