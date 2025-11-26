@@ -44,6 +44,21 @@ else:
     })
 
     st.info("ℹ️ Using sample data (upload file to replace)")
+# -------------------------------
+# Column Mapping (MUST be before KPIs)
+# -------------------------------
+st.sidebar.header("🧩 Column Mapping")
+
+stage_col = st.sidebar.selectbox(
+    "Select Stage column",
+    df.columns
+)
+
+value_col = st.sidebar.selectbox(
+    "Select Deal Value column",
+    df.columns
+)
+
 
 
 # ----------------------------------
